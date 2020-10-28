@@ -7,6 +7,7 @@ const slot2xBAR = "2xBAR";
 const slotBAR = "BAR";
 const slotCHERRY = "CHERRY";
 const slot7 = "7";
+
 let stateSlotValue = {
     0: slot3xBAR,
     1: slotBAR,
@@ -85,8 +86,8 @@ function getBottomValue(topValue) {
         return topValue - 1;
     }
 }
-function getSlot(index) {
 
-    return stateSlotValue[index];
+
+function getWinnings(){
+
 }
-

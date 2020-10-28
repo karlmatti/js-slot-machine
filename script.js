@@ -180,6 +180,10 @@ $(document).ready(function() {
 	console.log("gameEngine gen " + JSON.stringify(gameEngine.generateState(NO_OF_REELS)));
 	console.log("gameEngine get2 " + JSON.stringify(gameEngine.getState()));
 
+	// Add slot machine overlay
+	//
+	$('#booth').prepend('<img id="machine" src="machine.png" alt="slot machine"/>')
+
  	// hook start button
  	$('.go').on('click',function(){
  		console.log("spin")

@@ -1,14 +1,10 @@
 body {
-  margin: 0;
+  margin: auto;
   padding: 0;
+    background-color: beige;
 }
 
-#stage {
 
-    margin: 0 auto;
-  width: 600px;
-  padding: 0 0 40px;
-}
 
 .perspective-on {
   -webkit-perspective: 1000px;
@@ -18,9 +14,40 @@ body {
   -webkit-perspective: 0;
           perspective: 0;
 }
+#booth {
+    border: 1px solid brown;
+}
+#stage {
+    position:relative;
+
+
+    margin-left: auto;
+    margin-right: auto;
+    /*margin: 0 auto;
+    padding: 0 0 40px;*/
+    width: 600px;
+    border: 1px solid green;
+
+
+}
+#machine {
+    position:absolute;
+    z-index: 1;
+    transform: translateZ(0px);
+    width: 370px;
+    height: 350px;
+    margin-top: 10%;
+    margin-left: 16%;
+    margin-right: 22%;
+
+
+}
+
 
 #rotate {
 
+
+    border: 1px cadetblue;
     margin: 0 auto 0;
   width: 50%;
   height: 220px;
@@ -31,7 +58,7 @@ body {
 }
 .slotImg {
     width: 100%;
-    display: block;
+
 }
 .ring {
 
@@ -51,7 +78,7 @@ body {
   opacity: 0.9;
   color: rgba(0,0,0,0.9);
   background: #fff;
-  border: solid 2px lightgreen;
+
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
 }
@@ -70,6 +97,7 @@ body {
 }
 
 .go {
+
   display: block;
   margin: 0 auto 20px;
   padding:10px 30px;
