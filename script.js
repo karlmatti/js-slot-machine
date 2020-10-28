@@ -25,6 +25,7 @@ const SLOT_VALUE_RELATIONSHIP = {
 	11: cherry //<= This value is not counted in when spinning
 }
 
+
 function resetSlots() {
 	$('.slot').remove();
 	$('.slotImg').remove();
@@ -101,7 +102,7 @@ function setRandomSlotAngles() {
 			console.log("slot " + slot + " slotValue " + slotValue);
 			$(this).css('transform', 'rotateX(' + ((slotAngle * slot) + extraAngle) + 'deg)' +
 				' translateZ(' + REEL_RADIUS + 'px)');
-			(extraAngle !== 0) ? $(this).css('border', "1px solid green") : $(this).css('border', "0");
+
 
 			//console.log($(this).children(".slotImg"));
 			//$(this).children(".slotImg").css('transform', 'rotateX(' + ((slotAngle * slotValue) + extraAngle) + 'deg)' +

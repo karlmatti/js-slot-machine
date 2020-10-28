@@ -2,24 +2,25 @@
 let gameEngine = {};
 let state = {};
 let reelsCount = 0
-
-
-
-/*
-One reel state value relationship:
-0: 3xBAR,
-1: BAR,
-2: 2xBAR,
-3: 7,
-4: CHERRY,
-5: 3xBAR,
-6: BAR,
-7: 2xBAR,
-8: 7,
-9: CHERRY,
-10: 3xBAR, <= This value is not counted in when spinning
-11: CHERRY <= This value is not counted in when spinning
- */
+const slot3xBAR = "3xBAR";
+const slot2xBAR = "2xBAR";
+const slotBAR = "BAR";
+const slotCHERRY = "CHERRY";
+const slot7 = "7";
+let stateSlotValue = {
+    0: slot3xBAR,
+    1: slotBAR,
+    2: slot2xBAR,
+    3: slot7,
+    4: slotCHERRY,
+    5: slot3xBAR,
+    6: slotBAR,
+    7: slot2xBAR,
+    8: slot7,
+    9: slotCHERRY,
+    10: slot3xBAR,// <= This value is not counted in when spinning
+    11: slotCHERRY// <= This value is not counted in when spinning
+}
 
 
 gameEngine.generateState = function(noOfReels) {
@@ -51,9 +52,9 @@ gameEngine.updateState = function(isCenteredAndValue) {
                 console.log("true isCenteredAndValue["+i+"] " + JSON.stringify(isCenteredAndValue[i]));
 
                 if ((isCenteredAndValue[i].value + 4) > 11){
-                    state[i].center = isCenteredAndValue[i].value + 4 - 12;
+                    state[i].center = isCenteredAndValue[i].value + 4 - 12
                 } else {
-                    state[i].center = isCenteredAndValue[i].value + 4;
+                    state[i].center = isCenteredAndValue[i].value + 4
                 }
 
                 state[i].top = null;
@@ -64,11 +65,11 @@ gameEngine.updateState = function(isCenteredAndValue) {
                 state[i].center = null;
 
                 if ((isCenteredAndValue[i].value + 4) > 11){
-                    state[i].top = isCenteredAndValue[i].value + 4 - 12;
-                    state[i].bottom = getBottomValue(state[i].top);
+                    state[i].top = isCenteredAndValue[i].value + 4 - 12
+                    state[i].bottom = getBottomValue(state[i].top)
                 } else {
-                    state[i].top = isCenteredAndValue[i].value + 4;
-                    state[i].bottom = getBottomValue(state[i].top);
+                    state[i].top = isCenteredAndValue[i].value + 4
+                    state[i].bottom = getBottomValue(state[i].top)
                 }
 
             }
@@ -83,5 +84,9 @@ function getBottomValue(topValue) {
     } else {
         return topValue - 1;
     }
+}
+function getSlot(index) {
+
+    return stateSlotValue[index];
 }
 
