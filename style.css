@@ -1,10 +1,10 @@
 body {
   margin: auto;
   padding: 0;
-    background-image: url("https://miro.medium.com/max/12000/0*ydE1FbDatMKj_lNB");
+   /* background-image: url("https://miro.medium.com/max/12000/0*ydE1FbDatMKj_lNB");
     background-repeat: no-repeat;
-    background-size: cover;
-
+    background-size: cover;*/
+    font-family: Verdana, serif;
 
 }
 
@@ -20,6 +20,8 @@ body {
 }
 #booth {
     border: 1px solid brown;
+    width: 100%;
+    height: 100%;
 }
 #stage {
     position:relative;
@@ -100,19 +102,44 @@ body {
   margin: 0;
   text-align: center;
 }
+#controller {
+    border: 2px solid #d339f6;
+    display: flex;
+    height: 100%;
+}
+.controllerPiece {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+#contollerLeft {
+    border: 2px solid #81f639;
+}
+
+#contollerRight {
+    border: 2px solid #f6c739;
+}
+#contollerMid {
+
+    border: 2px solid #f63939;
+}
+
+
 
 .go {
-
+    background-color: lightblue;
+    color: purple;
   display: block;
-  margin: 0 auto 20px;
+  /*margin: 0 auto 20px;*/
   padding:10px 30px;
   font-size: 20px;
   cursor: pointer;
+    width: 80%;
 }
 .reset {
     display: block;
     margin: 0 auto 20px;
-    padding:10px 30px;
+    padding:30px 10px;
     font-size: 20px;
     cursor: pointer;
 }

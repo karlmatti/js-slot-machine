@@ -123,7 +123,7 @@ function setRandomSlotAngles() {
 	return isCentered;
 }
 function spin(timer) {
-	// TODO: Reset state
+
 	resetSlots();
 	let isCenteredAndValue = setRandomSlotAngles();
 	//console.log("isCenteredAndValue" + JSON.stringify(isCenteredAndValue));
@@ -171,6 +171,7 @@ function createReels(noOfReels){
 	}
 }
 
+
 $(document).ready(function() {
 
 	// Create initial reels
@@ -183,6 +184,18 @@ $(document).ready(function() {
 	// Add slot machine overlay
 	//
 	$('#booth').prepend('<img id="machine" src="machine.png" alt="slot machine"/>')
+
+
+
+    $("#selectMode").change(function(){
+        let mode = document.getElementById("selectMode").value;
+        console.log("New mode is " + mode);
+    });
+
+    $("#balance").change(function(){
+        let balance = document.getElementById("balance").value;
+        console.log("New balance is " + balance);
+    });
 
  	// hook start button
  	$('.go').on('click',function(){
@@ -225,3 +238,4 @@ $(document).ready(function() {
  		$('#stage').toggleClass('perspective-on perspective-off');
  	})	
  });
+
