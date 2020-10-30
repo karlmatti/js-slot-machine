@@ -2,7 +2,7 @@
 let gameEngine = {};
 let reelState = {};
 
-let reelsCount = 0
+let reelsCount = 3;
 const slot3xBAR = "3xBAR";
 const slot2xBAR = "2xBAR";
 const slotBAR = "BAR";
@@ -93,8 +93,71 @@ function getBottomValue(topKey) {
 
 
 gameEngine.getWinnings = function (){
-    let tempWinnings = 0;
-    return 0;
+
+    let winnings = {
+        amount: 0,
+        isTop: false,
+        isCenter: false,
+        isBottom: false
+    }
+    if(payTable.isTopCherries(reelState)) {
+        winnings.amount += 2000;
+        winnings.isTop = true;
+        console.log("isTopCherries");
+    }
+    if(payTable.isCenterCherries(reelState)){
+        winnings.amount += 1000;
+        winnings.isCenter = true;
+        console.log("isCenterCherries");
+    }
+    if(payTable.isBottomCherries(reelState)){
+        winnings.amount += 4000;
+        winnings.isBottom = true;
+        console.log("isBottomCherries");
+    }
+    let is7OnAnyLine = payTable.is7OnAnyLine(reelState);
+    if(is7OnAnyLine.winCount > 0){
+        winnings.amount += 150 * is7OnAnyLine.winCount;
+        if(is7OnAnyLine.isTop) winnings.isTop = is7OnAnyLine.isTop;
+        if(is7OnAnyLine.isCenter) winnings.isCenter = is7OnAnyLine.isCenter;
+        if(is7OnAnyLine.isBottom) winnings.isBottom = is7OnAnyLine.isBottom;
+        console.log("is7OnAnyLine" );
+    }
+    if(payTable.isCherry7Combination(reelState)){
+        winnings.amount += 75;
+
+        console.log("isCherry7Combination");
+    }
+    let is3xBARs = payTable.is3xBARs(reelState);
+    if(is3xBARs.winCount > 0){
+        winnings.amount += 50 * is3xBARs.winCount;
+        if(is3xBARs.isTop) winnings.isTop = is3xBARs.isTop;
+        if(is3xBARs.isCenter) winnings.isCenter = is3xBARs.isCenter;
+        if(is3xBARs.isBottom) winnings.isBottom = is3xBARs.isBottom;
+        console.log("is3xBARs");
+    }
+    let is2xBARs = payTable.is2xBARs(reelState);
+    if(is2xBARs.winCount > 0){
+        winnings.amount += 20 * is2xBARs.winCount;
+        if(is2xBARs.isTop) winnings.isTop = is2xBARs.isTop;
+        if(is2xBARs.isCenter) winnings.isCenter = is2xBARs.isCenter;
+        if(is2xBARs.isBottom) winnings.isBottom = is2xBARs.isBottom;
+        console.log("is2xBARs");
+    }
+    let isBARs = payTable.isBARs(reelState);
+    if(isBARs.winCount > 0){
+        winnings.amount += 10 * isBARs.winCount;
+        if(isBARs.isTop) winnings.isTop = isBARs.isTop;
+        if(isBARs.isCenter) winnings.isCenter = isBARs.isCenter;
+        if(isBARs.isBottom) winnings.isBottom = isBARs.isBottom;
+        console.log("isBARs");
+    }
+    if(payTable.isAnyBARs(reelState)){
+        winnings.amount += 5;
+        console.log("isAnyBARs");
+    }
+
+    return winnings;
 }
 
 /*

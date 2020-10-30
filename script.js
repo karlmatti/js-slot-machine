@@ -311,9 +311,6 @@ function spinFixed(timer) {
 				.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer + 0.5) + 's')
 				.attr('class','ring spin-' + seed);
 		}
-		console.log("FIXED STATE: " +
-			JSON.stringify(gameEngine.getState()));
-		console.log('===== End of SPIN =====');
 	}
 }
 
@@ -353,9 +350,7 @@ function spinRandom(timer) {
 			.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer + i*0.5) + 's')
 			.attr('class','ring spin-' + seed);
 	}
-	console.log("RANDOM STATE: " +
-		JSON.stringify(gameEngine.updateRandomReelState(isCenteredAndValue)));
-	console.log('===== End of SPIN =====');
+	gameEngine.updateRandomReelState(isCenteredAndValue);
 
 }
 function createReels(noOfReels){
@@ -453,8 +448,15 @@ $(document).ready(function() {
  		var timer = 2;
 		let mode = document.getElementById("selectMode").value;
 		(mode === "Random") ? spinRandom(timer) : spinFixed(timer);
- 		let winnings = gameEngine.getWinnings();
- 		console.log("$$$ Winnings: " + winnings + " $$$");
+		console.log("State =>");
+		console.log(gameEngine.getState());
+ 		let winningState = gameEngine.getWinnings();
+ 		console.log(winningState);
+ 		console.log("$$$ Winnings: " + winningState.amount + " $$$");
+ 		if (winningState.isTop) console.log("Winning line on TOP!");
+ 		if (winningState.isCenter) console.log("Winning line on CENTER!");
+ 		if (winningState.isBottom) console.log("Winning line on BOTTOM!");
+
  	})
 
 
