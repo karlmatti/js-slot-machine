@@ -120,15 +120,36 @@ function createFixedSlots(ring, reelNo) {
 		//console.log("Creating slot");
 
 		if (i === slotPosition) {
+			console.log("============ Reel No "+reelNo+" ============");
+
 			if (tempReelState[reelNo].isCentered) {
 				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].center]
+
+
+				if(i + 5 <= 11){
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].center]
+				} else {
+
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5-11] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].center]
+				}
+
+
 			} else {
-				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].top]
+				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].bottom]
+				if(i + 5 <= 11){
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].bottom]
+				} else {
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5-11] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].bottom]
+				}
 			}
 		} else if (i === slotPosition + 1) {
 			if (!tempReelState[reelNo].isCentered) {
-				console.log("setting bottom value")
-				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].bottom]
+				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].top]
+				if(i + 5 <= 11){
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].top]
+				} else {
+					SLOT_VALUE_RELATIONSHIP_FIXED[i+5-12] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].top]
+				}
 			}
 		}
 		//console.log("Slot append: "  + '<img class="slotImg" alt="slot" src="' + SLOT_VALUE_RELATIONSHIP_FIXED[i] +'"/>')
@@ -250,7 +271,7 @@ function validateFixedPositions(){
 		if (gameEngine.validateFixedReelValues(top, center, bottom)){
 			gameEngine.updateFixedReelState(i, top, center, bottom);
 		} else {
-			alert("Please choose either center | top-bottom combinations for each reel!");
+			alert("Please choose either 'CENTER' or 'TOP & BOTTOM' combinations for each reel!");
 			return false;
 		}
 
@@ -271,22 +292,57 @@ function spinFixed(timer) {
 		//console.log("tempFixedReelState: " + JSON.stringify(tempFixedReelState));
 
 
-		let startCount = 8;
+
+		let seed = 8;
 		for(let i = 1; i <= NO_OF_REELS; i ++) {
-			let oldSeed = -1;
 			/*
-            checking that the old seed from the previous iteration is not the same as the current iteration;
-            if this happens then the reel will not spin at all
-            */
+			checking that the old seed from the previous iteration is not the same as the current iteration;
+			if this happens then the reel will not spin at all
+			*/
+			let oldSeed = -1;
 			let ring = $('#ring'+i);
+			let oldClass = ring.attr('class');
+
+			if(oldClass.length > 4) {
+				oldSeed = parseInt(oldClass.slice(10));
+
+			}
+			console.log("Old Seed ===> "+oldSeed);
+			if (oldSeed > -1) { // NOT first spin
+				let difference = 5;
+				if (oldSeed % 2 === 0){ // oldSeed [10, 0, 2] > seed [3, 5, 7]
+
+					if (oldSeed + difference <= 12) {
+						seed = oldSeed + difference;
+					} else {
+						seed = oldSeed + difference - 12;
+					}
+
+				} else { // oldSeed [3, 5, 7] > seed [10, 0, 2]
+
+					if(oldSeed - difference >= 0) {
+						seed = oldSeed - difference
+					} else {
+						seed = 12 + oldSeed - difference
+					}
+
+				}
+
+			} else { // first spin
+				(seed >= 10) ? seed = 0 : seed += 2;
+			}
+
 			// 10,0,2
-			(startCount >= 10) ? startCount = 0 : startCount += 2;
-			let seed = startCount;
+			/*(startCount >= 10) ? startSeed = 0 : startSeed += 2;
+			let seed = startSeed;*/
+
+
 
 			console.log(i + " => Seed: " + seed);
-			console.log("animation time: " + (timer + i*0.5));
+
+
 			ring
-				.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer /*+ i*0.5*/) + 's')
+				.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer + 0.5) + 's')
 				.attr('class','ring spin-' + seed);
 		}
 
@@ -315,7 +371,7 @@ function spinRandom(timer) {
 		while(oldSeed === seed) {
 			seed = getSeed();
 		}
-
+		console.log(i + " => Seed: " + seed);
 		if ((seed + 4) > 11){
 			isCenteredAndValue[i]["value"] = seed;
 			//console.log(i + "new Seed: " + (seed + 4 - 12));
