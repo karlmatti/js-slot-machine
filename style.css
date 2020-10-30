@@ -7,7 +7,13 @@ body {
     font-family: Verdana, serif;
 
 }
-
+#debugArea {
+    border: 3px solid brown;
+    width: 600px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 
 .perspective-on {
@@ -22,6 +28,7 @@ body {
     border: 1px solid brown;
     width: 100%;
     height: 100%;
+
 }
 #stage {
     position:relative;
@@ -37,15 +44,13 @@ body {
 
 }
 #machine {
+    display: none;
     position:absolute;
     z-index: 1;
     transform: translateZ(0px);
     width: 370px;
     height: 360px;
-    margin-top: 9%;
-    margin-left: 16%;
-    margin-right: 22%;
-    margin-bottom: 9%;
+    margin: 9% 22% 9% 16%;
 
 
 }
@@ -106,6 +111,7 @@ body {
     border: 2px solid #d339f6;
     display: flex;
     height: 100%;
+    margin-top: 5%;
 }
 .controllerPiece {
     width: 100%;

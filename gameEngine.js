@@ -1,6 +1,7 @@
 
 let gameEngine = {};
 let state = {};
+let fixedReelState = {};
 let reelsCount = 0
 const slot3xBAR = "3xBAR";
 const slot2xBAR = "2xBAR";
@@ -88,6 +89,41 @@ function getBottomValue(topValue) {
 }
 
 
-function getWinnings(){
+gameEngine.getWinnings = function (){
+    let tempWinnings = 0;
+    return 0;
+}
 
+/*
+Input params.
+top: String
+center: String
+bottom: String
+==============
+Output param.
+True/False: Boolean
+ */
+gameEngine.validateFixedReelValues = function (top, center, bottom) {
+    if(center !== "null") {
+        return true;
+    } else return top !== "null" && bottom !== "null";
+}
+
+gameEngine.updateFixedReelState = function (reelNo, top, center, bottom) {
+    if (center !== "null") {
+        fixedReelState[reelNo] = {
+            isCentered: true,
+            center: center
+        }
+    } else {
+        fixedReelState[reelNo] = {
+            isCentered: false,
+            top: top,
+            bottom: bottom
+        }
+    }
+
+}
+gameEngine.getFixedReelState = function () {
+    return fixedReelState;
 }
