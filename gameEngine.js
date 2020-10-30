@@ -1,7 +1,7 @@
 
 let gameEngine = {};
-let state = {};
-let fixedReelState = {};
+let reelState = {};
+
 let reelsCount = 0
 const slot3xBAR = "3xBAR";
 const slot2xBAR = "2xBAR";
@@ -20,71 +20,74 @@ let stateSlotValue = {
     7: slot2xBAR,
     8: slot7,
     9: slotCHERRY,
-    10: slot3xBAR,// <= This value is not counted in when spinning
-    11: slotCHERRY// <= This value is not counted in when spinning
+    10: slot3xBAR,
+    11: slotCHERRY
 }
 
 
 gameEngine.generateState = function(noOfReels) {
     reelsCount = noOfReels;
     for (let i = 1; i <= noOfReels; i++){
-        state[i] = {
+        reelState[i] = {
             top: null,
-            center: 0,
-            bottom: null
+            center: stateSlotValue[0],
+            bottom: null,
+            isCentered: true
         }
     }
-    return state;
+    return reelState;
 }
 gameEngine.getState = function () {
-    return state;
+    return reelState;
 }
 
 gameEngine.setState = function (newState) {
-    state = newState;
-    return state;
+    reelState = newState;
+    return reelState;
 }
 
-gameEngine.updateState = function(isCenteredAndValue) {
+gameEngine.updateRandomReelState = function(isCenteredAndValue) {
     if (reelsCount === 0) {
         console.log("State is not generated yet!");
     } else {
         for (let i = 1; i <= reelsCount; i++){
             if (isCenteredAndValue[i].isCentered) {
-                console.log("true isCenteredAndValue["+i+"] " + JSON.stringify(isCenteredAndValue[i]));
 
                 if ((isCenteredAndValue[i].value + 4) > 11){
-                    state[i].center = isCenteredAndValue[i].value + 4 - 12
+                    reelState[i].center = stateSlotValue[isCenteredAndValue[i].value + 4 - 12]
                 } else {
-                    state[i].center = isCenteredAndValue[i].value + 4
+                    reelState[i].center = stateSlotValue[isCenteredAndValue[i].value + 4]
                 }
-
-                state[i].top = null;
-                state[i].bottom = null;
+                reelState[i].isCentered = isCenteredAndValue[i].isCentered;
+                reelState[i].top = null;
+                reelState[i].bottom = null;
             } else {
-                console.log("false isCenteredAndValue["+i+"] " + JSON.stringify(isCenteredAndValue[i]));
 
-                state[i].center = null;
 
+                reelState[i].center = null;
+                reelState[i].isCentered = isCenteredAndValue[i].isCentered;
                 if ((isCenteredAndValue[i].value + 4) > 11){
-                    state[i].top = isCenteredAndValue[i].value + 4 - 12
-                    state[i].bottom = getBottomValue(state[i].top)
+
+                    reelState[i].top = stateSlotValue[isCenteredAndValue[i].value + 4 - 12]
+                    reelState[i].bottom = stateSlotValue[getBottomValue(isCenteredAndValue[i].value + 4 - 12)]
+
                 } else {
-                    state[i].top = isCenteredAndValue[i].value + 4
-                    state[i].bottom = getBottomValue(state[i].top)
+
+                    reelState[i].top = stateSlotValue[isCenteredAndValue[i].value + 4]
+                    reelState[i].bottom = stateSlotValue[getBottomValue(isCenteredAndValue[i].value + 4)]
                 }
 
             }
         }
-        return state;
+        return reelState;
     }
 
 }
-function getBottomValue(topValue) {
-    if(topValue === 0) {
+function getBottomValue(topKey) {
+    if(topKey === 0) {
         return 9;
     } else {
-        return topValue - 1;
+        return topKey - 1;
     }
 }
 
@@ -111,19 +114,19 @@ gameEngine.validateFixedReelValues = function (top, center, bottom) {
 
 gameEngine.updateFixedReelState = function (reelNo, top, center, bottom) {
     if (center !== "null") {
-        fixedReelState[reelNo] = {
+        reelState[reelNo] = {
             isCentered: true,
-            center: center
+            center: center,
+            top: null,
+            bottom: null
         }
     } else {
-        fixedReelState[reelNo] = {
+        reelState[reelNo] = {
             isCentered: false,
             top: top,
-            bottom: bottom
+            bottom: bottom,
+            center: null
         }
     }
 
-}
-gameEngine.getFixedReelState = function () {
-    return fixedReelState;
 }

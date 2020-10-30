@@ -31,7 +31,8 @@ const SLOT_VALUE_RELATIONSHIP = {
 	10: img3xBAR, //<= This value is not counted in when spinning
 	11: imgCHERRY //<= This value is not counted in when spinning
 }
-/*const SLOT_VALUE_RELATIONSHIP_FIXED = {
+
+let SLOT_VALUE_RELATIONSHIP_FIXED = {
 	0: img3xBAR,
 	1: imgBAR,
 	2: img2xBAR,
@@ -42,48 +43,24 @@ const SLOT_VALUE_RELATIONSHIP = {
 	7: img2xBAR,
 	8: img7,
 	9: imgCHERRY,
-	10: img3xBAR,
-	11: imgCHERRY
-}*/
-let SLOT_VALUE_RELATIONSHIP_FIXED = {
-	0: img7,
-	1: img7,
-	2: img7,
-	3: img7,
-	4: img7,
-	5: img7,
-	6: img7,
-	7: img7,
-	8: img7,
-	9: img7,
-	10: img7,
-	11: img7
+	10: img3xBAR, //<= This value is not counted in when spinning
+	11: imgCHERRY //<= This value is not counted in when spinning
 }
 
-let SLOT_VALUE_RELATIONSHIP_FIXED2 = {
-	0: img7,
-	1: img7,
-	2: img7,
-	3: img7,
-	4: img7,
-	5: img7,
-	6: img7,
-	7: img7,
-	8: img7,
-	9: img7,
-	10: img7,
-	11: img7
-}
+
 
 
 
 function deleteSlots(){
 	$('.slot').remove();
 	$('.slotImg').remove();
+	$('.ring').remove();
+
 }
 
 function resetFixedSlots(){
 	deleteSlots();
+
 	createFixedReels(NO_OF_REELS);
 }
 
@@ -94,14 +71,11 @@ function resetSlots() {
 }
 
 function createFixedSlots(ring, reelNo) {
-
-	let tempReelState = gameEngine.getFixedReelState();
+	Object.assign(SLOT_VALUE_RELATIONSHIP_FIXED, SLOT_VALUE_RELATIONSHIP);
+	let tempReelState = gameEngine.getState();
 	let slotAngle = 360 / SLOTS_PER_REEL;
 
 
-	//console.log("tempReelState[reelNo] =>");
-	//console.log(tempReelState[reelNo])
-	//console.log("!tempReelState[reelNo].isCentered => "+!tempReelState[reelNo].isCentered )
 	let slotPosition = reelNo * 2;
 	for (let i = 0; i < SLOTS_PER_REEL; i ++) {
 		let slot = document.createElement('div');
@@ -113,18 +87,11 @@ function createFixedSlots(ring, reelNo) {
 			'rotateX(' + (slotAngle * i) + 'deg)' +
 			' translateZ(' + REEL_RADIUS + 'px)';
 
-		// setup the number to show inside the slots
-		// the position is randomized to
-		//var content = $(slot).append('<p>' + ((seed + i) % SLOTS_PER_REEL)+ '</p>');
-		//console.log('<img class="slotImg" alt="slot" src="' + SLOT_VALUE_RELATIONSHIP[i] +'"/>');
-		//console.log("Creating slot");
-
 		if (i === slotPosition) {
 			console.log("============ Reel No "+reelNo+" ============");
 
 			if (tempReelState[reelNo].isCentered) {
 				SLOT_VALUE_RELATIONSHIP_FIXED[i] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].center]
-
 
 				if(i + 5 <= 11){
 					SLOT_VALUE_RELATIONSHIP_FIXED[i+5] = SLOT_NAME_SLOT_SRC[tempReelState[reelNo].center]
@@ -152,19 +119,17 @@ function createFixedSlots(ring, reelNo) {
 				}
 			}
 		}
-		//console.log("Slot append: "  + '<img class="slotImg" alt="slot" src="' + SLOT_VALUE_RELATIONSHIP_FIXED[i] +'"/>')
 		$(slot).append('<img class="slotImg" alt="slot" src="' + SLOT_VALUE_RELATIONSHIP_FIXED[i] +'"/>');
 
 
 
-		//var content = $(slot).append('<img class="slotImg" alt="slot" src="' + SLOT_VALUE_RELATIONSHIP[i] +'"/>');
+
 		// add the poster to the row
 		ring.append(slot);
 	}
-	console.log("SLOT_VALUE_RELATIONSHIP_FIXED => ");
-	console.log(SLOT_VALUE_RELATIONSHIP_FIXED);
 
-	Object.assign(SLOT_VALUE_RELATIONSHIP_FIXED, SLOT_VALUE_RELATIONSHIP_FIXED2);
+
+
 
 
 
@@ -287,7 +252,7 @@ function spinFixed(timer) {
 
 		// set reel angle
 		//console.log("setting reel angle");
-		let tempFixedReelState = gameEngine.getFixedReelState();
+		let tempFixedReelState = gameEngine.getState();
 		setFixedSlotAngles(tempFixedReelState);
 		//console.log("tempFixedReelState: " + JSON.stringify(tempFixedReelState));
 
@@ -302,13 +267,14 @@ function spinFixed(timer) {
 			let oldSeed = -1;
 			let ring = $('#ring'+i);
 			let oldClass = ring.attr('class');
-
+			console.log("oldClass => "+ oldClass);
 			if(oldClass.length > 4) {
 				oldSeed = parseInt(oldClass.slice(10));
 
 			}
 			console.log("Old Seed ===> "+oldSeed);
 			if (oldSeed > -1) { // NOT first spin
+
 				let difference = 5;
 				if (oldSeed % 2 === 0){ // oldSeed [10, 0, 2] > seed [3, 5, 7]
 
@@ -345,7 +311,9 @@ function spinFixed(timer) {
 				.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer + 0.5) + 's')
 				.attr('class','ring spin-' + seed);
 		}
-
+		console.log("FIXED STATE: " +
+			JSON.stringify(gameEngine.getState()));
+		console.log('===== End of SPIN =====');
 	}
 }
 
@@ -385,20 +353,28 @@ function spinRandom(timer) {
 			.css('animation','back-spin 1s, spin-' + seed + ' ' + (timer + i*0.5) + 's')
 			.attr('class','ring spin-' + seed);
 	}
-	/*console.log("Updated state: " +
-		JSON.stringify(gameEngine.updateState(isCenteredAndValue)));*/
+	console.log("RANDOM STATE: " +
+		JSON.stringify(gameEngine.updateRandomReelState(isCenteredAndValue)));
 	console.log('===== End of SPIN =====');
 
 }
 function createReels(noOfReels){
 	// initiate slots
 	for(let i = 1; i <= noOfReels; i ++) {
+		let ring = document.createElement('div');
+		ring.className = 'ring';
+		ring.id = 'ring' + i;
+		$('#rotate').append(ring);
 		createSlots($('#ring' + i));
 	}
 }
 function createFixedReels(noOfReels){
 	// initiate slots
 	for(let i = 1; i <= noOfReels; i++) {
+		let ring = document.createElement('div');
+		ring.className = 'ring';
+		ring.id = 'ring' + i;
+		$('#rotate').append(ring);
 		createFixedSlots($('#ring' + i), i);
 	}
 }
