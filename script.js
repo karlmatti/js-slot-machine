@@ -421,7 +421,7 @@ function increaseBalanceBy(amount) {
 	/*.blinking-bg {
 		animation: blinkingBackground 2s ;
 	}*/
-	let blinkMs = 1000
+	let blinkMs = 2000
 	let waitMs = 2500
 	let balance = $('#balance')
 	let oldAmount = parseInt(balance.val());
@@ -438,6 +438,26 @@ function increaseBalanceBy(amount) {
 		$('#balance').removeClass('blinking-bg');
 		balance.val(newBalance);
 	}, waitMs + blinkMs);
+
+}
+function showWinningLines(state) {
+	let booth = $('#booth')
+	let winLine1 = document.createElement('div');
+	let winLine2 = document.createElement('div');
+
+	if (state.isTop) {
+		winLine1.className = 'winLine winLineTop'
+	}
+	if(state.isCenter) {
+		winLine1.className = 'winLine winLineCenter'
+	}
+	if (state.isBottom) {
+		winLine2.className = 'winLine winLineBottom'
+	}
+	setTimeout(function() {
+		booth.prepend(winLine1);
+		booth.prepend(winLine2);
+	}, 2500);
 
 }
 $(document).ready(function() {
@@ -477,16 +497,19 @@ $(document).ready(function() {
  	$('.go').on('click',function(){
  		let balance = $('#balance');
  		if(balance.val() > 0){
+ 			$('.winLine').remove();
  			balance.val(balance.val() - 1);
 			let timer = 2;
 			let mode = document.getElementById("selectMode").value;
 			(mode === "Random") ? spinRandom(timer) : spinFixed(timer);
 			console.log("State =>");
-			console.log(gameEngine.getState());
+			console.log(gameEngine.getWinnings());
 			let winningState = gameEngine.getWinnings();
 			if (winningState.amount > 0) {
 				console.log("$$$ Winnings: " + winningState.amount + " $$$");
 				increaseBalanceBy(winningState.amount);
+
+				showWinningLines(winningState);
 			}
 
 			if (winningState.isTop) console.log("Winning line on TOP!");
