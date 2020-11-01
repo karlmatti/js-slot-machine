@@ -100,21 +100,26 @@ gameEngine.getWinnings = function (){
         isCenter: false,
         isBottom: false
     }
-    if(payTable.isTopCherries(reelState)) {
-        winnings.amount += 2000;
-        winnings.isTop = true;
-        console.log("isTopCherries");
+    let isCherriesOnAnyLine = payTable.isCherriesOnAnyLine(reelState);
+    if (isCherriesOnAnyLine.winCount > 0) {
+        if (isCherriesOnAnyLine.isTop) {
+            winnings.amount += 2000;
+            winnings.isTop = true;
+            console.log("isTopCherries");
+        }
+        if (isCherriesOnAnyLine.isCenter) {
+            winnings.amount += 1000;
+            winnings.isCenter = true;
+            console.log("isCenterCherries");
+        }
+        if (isCherriesOnAnyLine.isBottom) {
+            winnings.amount += 4000;
+            winnings.isBottom = true;
+            console.log("isBottomCherries");
+        }
     }
-    if(payTable.isCenterCherries(reelState)){
-        winnings.amount += 1000;
-        winnings.isCenter = true;
-        console.log("isCenterCherries");
-    }
-    if(payTable.isBottomCherries(reelState)){
-        winnings.amount += 4000;
-        winnings.isBottom = true;
-        console.log("isBottomCherries");
-    }
+
+
     let is7OnAnyLine = payTable.is7OnAnyLine(reelState);
     if(is7OnAnyLine.winCount > 0){
         winnings.amount += 150 * is7OnAnyLine.winCount;
@@ -123,10 +128,26 @@ gameEngine.getWinnings = function (){
         if(is7OnAnyLine.isBottom) winnings.isBottom = is7OnAnyLine.isBottom;
         console.log("is7OnAnyLine" );
     }
-    if(payTable.isCherry7Combination(reelState)){
-        winnings.amount += 75;
+    let isCherry7Combination = payTable.isCherry7Combination(reelState);
+    if(isCherry7Combination.winCount > 0){
 
-        console.log("isCherry7Combination");
+        let cherry7Winnings = 75;
+        if(isCherry7Combination.isTop && !(isCherriesOnAnyLine.isTop || is7OnAnyLine.isTop)){
+            winnings.isTop = isCherry7Combination.isTop;
+            winnings.amount += cherry7Winnings;
+            console.log("isCherry7Combination");
+        }
+        if(isCherry7Combination.isCenter && !(isCherriesOnAnyLine.isCenter || is7OnAnyLine.isCenter)) {
+            winnings.isCenter = isCherry7Combination.isCenter;
+            winnings.amount += cherry7Winnings;
+            console.log("isCherry7Combination");
+        }
+        if(isCherry7Combination.isBottom && !(isCherriesOnAnyLine.isBottom || is7OnAnyLine.isBottom)) {
+            winnings.isBottom = isCherry7Combination.isBottom;
+            winnings.amount += cherry7Winnings;
+            console.log("isCherry7Combination");
+        }
+
     }
     let is3xBARs = payTable.is3xBARs(reelState);
     if(is3xBARs.winCount > 0){
@@ -152,22 +173,43 @@ gameEngine.getWinnings = function (){
         if(isBARs.isBottom) winnings.isBottom = isBARs.isBottom;
         console.log("isBARs");
     }
-    if(payTable.isAnyBARs(reelState)){
-        winnings.amount += 5;
-        console.log("isAnyBARs");
+    let isAnyBARs = payTable.isAnyBARs(reelState);
+    if(isAnyBARs.winCount > 0){
+        let anyBARsWinnings = 5;
+        if(isAnyBARs.isTop &&
+            !(isBARs.isTop || is2xBARs.isTop || is3xBARs.isTop)){
+            winnings.amount += anyBARsWinnings;
+            winnings.isTop = isAnyBARs.isTop;
+            console.log("isAnyBARs");
+        }
+
+        if(isAnyBARs.isCenter &&
+            !(isBARs.isCenter || is2xBARs.isCenter || is3xBARs.isCenter)){
+            winnings.amount += anyBARsWinnings;
+            winnings.isCenter = isAnyBARs.isCenter;
+            console.log("isAnyBARs");
+        }
+
+        if(isAnyBARs.isBottom &&
+            !(isBARs.isBottom || is2xBARs.isBottom || is3xBARs.isBottom)){
+            winnings.amount += anyBARsWinnings;
+            winnings.isBottom = isAnyBARs.isBottom;
+            console.log("isAnyBARs");
+        }
+
     }
 
     return winnings;
 }
 
 /*
-Input params.
+INPUT
 top: String
 center: String
 bottom: String
 ==============
-Output param.
-True/False: Boolean
+OUTPUT
+true/false: Boolean
  */
 gameEngine.validateFixedReelValues = function (top, center, bottom) {
     if(center !== "null") {

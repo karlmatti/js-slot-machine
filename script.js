@@ -417,7 +417,29 @@ function activateRandomMode() {
     $('.selectSlotArea').remove();
 
 }
+function increaseBalanceBy(amount) {
+	/*.blinking-bg {
+		animation: blinkingBackground 2s ;
+	}*/
+	let blinkMs = 1000
+	let waitMs = 2500
+	let balance = $('#balance')
+	let oldAmount = parseInt(balance.val());
+	let newBalance = oldAmount + amount;
+	setTimeout(function() {
+		balance.val(amount);
+		balance.attr('class','blinking-bg');
+	}, waitMs);
+	console.log("oldAmount => "+ typeof oldAmount);
+	console.log("amount => "+ typeof amount);
+	console.log("newBalance => "+ typeof newBalance);
 
+	setTimeout(function() {
+		$('#balance').removeClass('blinking-bg');
+		balance.val(newBalance);
+	}, waitMs + blinkMs);
+
+}
 $(document).ready(function() {
 
 	// Create initial reels
@@ -439,23 +461,41 @@ $(document).ready(function() {
 
     $("#balance").change(function(){
         let balance = document.getElementById("balance").value;
-        console.log("New balance is " + balance);
+        if(balance > 5000) {
+        	alert("Sorry! You cannot put the balance value more than 5000. ");
+			document.getElementById("balance").value = 5000;
+			//console.log("New balance is " + 5000);
+		} else if (balance < 1) {
+			alert("Sorry! You cannot put the balance value less than 1. ");
+			document.getElementById("balance").value = 1;
+			//console.log("New balance is " + 1);
+		}
+
     });
 
  	// hook start button
  	$('.go').on('click',function(){
- 		console.log("spin")
- 		var timer = 2;
-		let mode = document.getElementById("selectMode").value;
-		(mode === "Random") ? spinRandom(timer) : spinFixed(timer);
-		console.log("State =>");
-		console.log(gameEngine.getState());
- 		let winningState = gameEngine.getWinnings();
- 		console.log(winningState);
- 		console.log("$$$ Winnings: " + winningState.amount + " $$$");
- 		if (winningState.isTop) console.log("Winning line on TOP!");
- 		if (winningState.isCenter) console.log("Winning line on CENTER!");
- 		if (winningState.isBottom) console.log("Winning line on BOTTOM!");
+ 		let balance = $('#balance');
+ 		if(balance.val() > 0){
+ 			balance.val(balance.val() - 1);
+			let timer = 2;
+			let mode = document.getElementById("selectMode").value;
+			(mode === "Random") ? spinRandom(timer) : spinFixed(timer);
+			console.log("State =>");
+			console.log(gameEngine.getState());
+			let winningState = gameEngine.getWinnings();
+			if (winningState.amount > 0) {
+				console.log("$$$ Winnings: " + winningState.amount + " $$$");
+				increaseBalanceBy(winningState.amount);
+			}
+
+			if (winningState.isTop) console.log("Winning line on TOP!");
+			if (winningState.isCenter) console.log("Winning line on CENTER!");
+			if (winningState.isBottom) console.log("Winning line on BOTTOM!");
+		} else {
+ 			alert("Sorry not enough funds!")
+		}
+
 
  	})
 
