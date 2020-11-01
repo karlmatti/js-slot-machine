@@ -393,7 +393,7 @@ function activateDebugMode() {
             id += position;
             $(div).append(
                 '<label class="selectSlotLabel" for="'+id+'">'+position+':</label>' +
-                '<select id="'+id+'" class="selectSlot">' +
+                '<select id="'+id+'" class="selectSlot myDropDown">' +
                 '<option class="selectSlotValue" value='+null+'>-' +
                 '<option class="selectSlotValue" value="'+slot3xBAR+'">'+slot3xBAR +
                 '<option class="selectSlotValue" value="'+slot2xBAR+'">'+slot2xBAR+

@@ -17,11 +17,33 @@
 			<div id="ring2" class="ring"></div>
 			<div id="ring3" class="ring"></div>
 		</div>
+		<div id="controller">
+			<div id="contollerLeft" class="controllerPiece">
+				<label for="selectMode">Mode:</label><select id="selectMode" class="myDropDown">
+				<option value="Random">Random
+				<option value="Debug">Debug
+			</select>
+			</div>
+			<div id="contollerMid" class="controllerPiece">
+				<button class="go">SPIN</button>
+			</div>
+			<div id="contollerRight" class="controllerPiece">
+				<label for="balance">Balance:</label>
+				<input type="number"
+					   step="1"
+					   value="10"
+					   min="1"
+					   max="5000"
+					   id="balance"
+					   name="balance">
 
+			</div>
+		</div>
+		<div id="debugArea">
 	</div>
-	<div id="controller">
+	<!--<div id="controller">
 		<div id="contollerLeft" class="controllerPiece">
-			<label for="selectMode">Mode:</label><select id="selectMode">
+			<label for="selectMode">Mode:</label><select id="selectMode" class="myDropDown">
 			<option value="Random">Random
 			<option value="Debug">Debug
 		</select>
@@ -40,7 +62,7 @@
 				   name="balance">
 
 		</div>
-	</div>
+	</div>-->
 
 
   
@@ -56,7 +78,7 @@
 		  </div>
   
 	</div>
-<div id="debugArea">
+
 
 </div>
 <!-- partial -->
