@@ -1,6 +1,6 @@
 # JavaScript Slot machine with 3 reels
 
-###Instructions
+### Instructions
 Just open the index.html in Google Chrome.
 
 ### Functionalities
